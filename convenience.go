@@ -1,9 +1,14 @@
 package xmlpath
 
-import (
-	"errors"
-	"strings"
-)
+import "strings"
+
+type NoNodesFoundError struct {
+	msg string
+}
+
+func (e *NoNodesFoundError) Error() string {
+	return e.msg
+}
 
 // FindAllString finds all matching node's string values
 // Func names inspired by the std regexp package names
@@ -38,7 +43,7 @@ func FindString(xml, xpath string) (string, error) {
 	}
 
 	if len(ss) == 0 {
-		return "", errors.New("No Strings found for given xpath")
+		return "", &NoNodesFoundError{"No Strings found for given xpath"}
 	}
 
 	return ss[0], nil
